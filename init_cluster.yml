@@ -6,17 +6,17 @@
 
   tasks:
     - name: Run 01-node-configure.sh
-      shell: sh /ansible/kosa-infra-lab/01-node-configure.sh
+      shell: sh /kosa-infra-lab/01-node-configure.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
 
     - name: Run 02-kubeadm-controller.sh
-      shell: sh /ansible/kosa-infra-lab/02-kubeadm-controller.sh
+      shell: sh /kosa-infra-lab/02-kubeadm-controller.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
 
     - name: Run 04-helm-controller.sh
-      shell: sh /ansible/kosa-infra-lab/04-helm-controller.sh
+      shell: sh /kosa-infra-lab/04-helm-controller.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
 
@@ -26,7 +26,7 @@
       become_user: root
 
     - name: Run 05-calico-installation.sh
-      shell: sh /ansible/kosa-infra-lab/05-calico-installation.sh
+      shell: sh /kosa-infra-lab/05-calico-installation.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
 
@@ -37,11 +37,11 @@
 
   tasks:
     - name: Run 01-node-configure.sh
-      shell: sh /ansible/kosa-infra-lab/01-node-configure.sh
+      shell: sh /kosa-infra-lab/01-node-configure.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
 
     - name: Run 03-kubeadm-join.sh
-      shell: sh /ansible/kosa-infra-lab/03-kubeadm-join.sh
+      shell: sh /kosa-infra-lab/03-kubeadm-join.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
