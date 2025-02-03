@@ -33,6 +33,15 @@
       become_user: root  # 루트 권한으로 실행
       args:
         chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
+        
+    - name: Wait for Kubernetes API server to be ready
+      wait_for:
+        host: "192.168.10.10"
+        port: 6443
+        delay: 10
+        timeout: 900
+      become: yes
+      become_user: root
 
 - name: Configure Kubernetes Worker Nodes
   hosts: Worker  # worker 호스트 그룹
