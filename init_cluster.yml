@@ -34,14 +34,6 @@
       args:
         chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
       
-    - name: Run 05-calico-installation.sh
-      shell: sh 05-calico-installation.sh
-      become: yes
-      become_user: root  # 루트 권한으로 실행
-      args:
-        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
-        
-
 
 - name: Configure Kubernetes Worker Nodes
   hosts: Workers  # worker 호스트 그룹
