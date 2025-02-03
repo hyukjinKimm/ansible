@@ -1,4 +1,3 @@
-
 ---
 - name: Configure Kubernetes Controller
   hosts: Controller  # controller 호스트 그룹
@@ -6,29 +5,39 @@
 
   tasks:
     - name: Run 01-node-configure.sh
-      shell: sh /kosa-infra-lab/01-node-configure.sh
+      shell: sh 01-node-configure.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
     - name: Run 02-kubeadm-controller.sh
-      shell: sh /kosa-infra-lab/02-kubeadm-controller.sh
+      shell: sh 02-kubeadm-controller.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
     - name: Run 04-helm-controller.sh
-      shell: sh /kosa-infra-lab/04-helm-controller.sh
+      shell: sh 04-helm-controller.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
     - name: Export KUBECONFIG environment variable
       shell: export KUBECONFIG=/etc/kubernetes/admin.conf
       become: yes
       become_user: root
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
     - name: Run 05-calico-installation.sh
-      shell: sh /kosa-infra-lab/05-calico-installation.sh
+      shell: sh 05-calico-installation.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
 - name: Configure Kubernetes Worker Nodes
   hosts: Worker  # worker 호스트 그룹
@@ -37,11 +46,15 @@
 
   tasks:
     - name: Run 01-node-configure.sh
-      shell: sh /kosa-infra-lab/01-node-configure.sh
+      shell: sh 01-node-configure.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
     - name: Run 03-kubeadm-join.sh
-      shell: sh /kosa-infra-lab/03-kubeadm-join.sh
+      shell: sh 03-kubeadm-join.sh
       become: yes
       become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
