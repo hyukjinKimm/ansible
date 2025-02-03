@@ -13,8 +13,6 @@
           192.168.10.30
           [Storage]
           192.168.10.40
-    - name: Install sshpass for Authentication
-      yum:
-        name: sshpass
-        state: present
-   
+    - name: RUN add_ssh_auth.sh script
+      shell: /ansible/add_ssh_auth.sh
+      become: yes
