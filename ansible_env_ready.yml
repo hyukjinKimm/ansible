@@ -13,5 +13,8 @@
           192.168.10.30
           [Storage]
           192.168.10.40
-          
+    - name: Install sshpass for Authentication
+      yum:
+        name: sshpass
+        state: present
  
