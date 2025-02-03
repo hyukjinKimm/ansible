@@ -17,13 +17,6 @@
       become_user: root  # 루트 권한으로 실행
       args:
         chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
-
-    - name: Run 04-helm-controller.sh
-      shell: sh 04-helm-controller.sh
-      become: yes
-      become_user: root  # 루트 권한으로 실행
-      args:
-        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
         
     - name: Wait for Kubernetes API server to be ready
       wait_for:
@@ -33,6 +26,13 @@
         timeout: 900
       become: yes
       become_user: root
+
+    - name: Run 04-helm-controller.sh
+      shell: sh 04-helm-controller.sh
+      become: yes
+      become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
       
     - name: Run 05-calico-installation.sh
       shell: |
