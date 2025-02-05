@@ -77,12 +77,12 @@
     - name: master_join move to control node
       fetch:
         src: /kosa-infra-lab/master_join.sh
-        dest: ./master_join.sh
+        dest: /root/master_join.sh
         flat: yes
 
     - name: worker_join move to control node
       fetch:
         src: /kosa-infra-lab/worker_join.sh
-        dest: ./worker_join.sh
+        dest: /root/worker_join.sh
         flat: yes
 
