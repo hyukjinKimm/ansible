@@ -4,7 +4,6 @@
     - Controller  # controller 호스트 그룹
   #  - Workers     # worker 호스트 그룹
   gather_facts: no
-  serial: 1  # 하나씩 순차적으로 실행
 
   tasks:
     - name: Reset kubeadm configuration
