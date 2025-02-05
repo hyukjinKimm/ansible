@@ -61,7 +61,7 @@
   serial: 1  # 하나씩 순차적으로 실행
 
   tasks:
-      - name: Install Git
+    - name: Install Git
       package:
         name: git
         state: present
