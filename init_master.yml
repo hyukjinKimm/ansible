@@ -86,7 +86,7 @@
     - name: Copy master_join.sh from Agent to Ansible Controller
       become: yes
       become_user: root  # 루트 권한으로 실행
-      fetch:
+      copy:
         src: /kosa-infra-lab/master_join.sh  
         dest: /root/
         flat: yes  
