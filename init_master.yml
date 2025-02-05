@@ -39,14 +39,23 @@
       become_user: root
 
     - name: Generate master_join.sh
-      shell: "echo '#! /bin/bash' >> /kosa-infra-lab/master_join.sh && cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'kubeadm join' | tr -d '\\' | sed 's/^[[:space:]]*//g' | sort | uniq >> /kosa-infra-lab/master_join.sh && cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'discovery-token-ca-cert-hash' | tr -d '\\' | uniq >> /kosa-infra-lab/master_join.sh && cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'control-plane --certificate-key' | tr -d '\\' | uniq >> /kosa-infra-lab/master_join.sh"
+      shell: |
+        echo '#! /bin/bash' > /kosa-infra-lab/master_join.sh
+        cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'kubeadm join' | tr -d '\\' | sed 's/^[[:space:]]*//g' | sort | uniq >> /kosa-infra-lab/master_join.sh
+        cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'discovery-token-ca-cert-hash' | tr -d '\\' | uniq >> /kosa-infra-lab/master_join.sh
+        cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'control-plane --certificate-key' | tr -d '\\' | uniq >> /kosa-infra-lab/master_join.sh
       become: yes
       become_user: root
 
+
     - name: Generate worker_join.sh
-      shell: "echo '#! /bin/bash' >> /kosa-infra-lab/master_join.sh && cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'kubeadm join' | tr -d '\\' | sed 's/^[[:space:]]*//g' | sort | uniq >> /kosa-infra-lab/worker_join.sh && cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'discovery-token-ca-cert-hash' | tr -d '\\' | uniq >> /kosa-infra-lab/worker_join.sh && cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'control-plane --certificate-key' | tr -d '\\' | uniq >> /kosa-infra-lab/worker_join.sh"
+      shell: |
+        echo '#! /bin/bash' > /kosa-infra-lab/worker_join.sh
+        cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'kubeadm join' | tr -d '\\' | sed 's/^[[:space:]]*//g' | sort | uniq >> /kosa-infra-lab/worker_join.sh
+        cat /kosa-infra-lab/kubeadm_controller_output.log | grep 'discovery-token-ca-cert-hash' | tr -d '\\' | uniq >> /kosa-infra-lab/worker_join.sh
       become: yes
       become_user: root
+
 
 
     - name: Wait for Kubernetes API server to be ready
