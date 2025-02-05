@@ -23,6 +23,11 @@
         state: absent
       become: yes
       become_user: root  # 루트 권한으로 실행
+      
+    - name: Delete Repository
+      shell: rm -rf /kosa-infra-lab/
+      become: yes
+      become_user: root  # 루트 권한으로 실행
 
     - name: Reboot the system
       reboot:
