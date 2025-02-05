@@ -1,0 +1,77 @@
+- name: Configure Kubernetes Controller
+  hosts: Controller  # controller 호스트 그룹
+  gather_facts: no
+
+  tasks:
+    - name: Install Git
+      package:
+        name: git
+        state: present
+      become: yes
+
+    - name: Clone kosa-infra-lab repository
+      git:
+        repo: "https://github.com/hyukjinKimm/kosa-infra-lab.git"
+        dest: "/kosa-infra-lab"
+        force: yes  # 기존 디렉토리 삭제 후 다시 클론
+      become: yes
+
+    - name: Run 01-node-configure.sh
+      shell: sh 01-node-configure.sh
+      become: yes
+      become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
+
+    - name: Run 02-kubeadm-controller.sh
+      shell: sh 02-kubeadm-controller.sh
+      become: yes
+      become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
+      register: kubeadm_controller_output
+
+    - name: Save all output to file
+      copy:
+        content: "{{ kubeadm_controller_output.stdout }}"
+        dest: "/kosa-infra-lab/kubeadm_controller_output.log"
+      become: yes
+      become_user: root
+
+    - name: Generate master_join.sh
+      raw: |
+        bash -c 'echo "#! /bin/bash" > /kosa-infra-lab/master_join.sh;
+             cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d "\\" | sed "s/^[[:space:]]*//g" | sort | uniq >> /kosa-infra-lab/master_join.sh;
+             cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d "\\" | uniq >> /kosa-infra-lab/master_join.sh;
+             cat /kosa-infra-lab/kubeadm_controller_output.log | grep "control-plane --certificate-key" | tr -d "\\" | uniq >> /kosa-infra-lab/master_join.sh'
+
+    - name: Generate worker_join.sh
+      raw: |
+        bash -c 'echo "#! /bin/bash" > /kosa-infra-lab/worker_join.sh;
+             cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d "\\" | sed "s/^[[:space:]]*//g" | sort | uniq >> /kosa-infra-lab/worker_join.sh;
+             cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d "\\" | uniq >> /kosa-infra-lab/worker_join.sh'
+
+
+    - name: Wait for Kubernetes API server to be ready
+      wait_for:
+        host: "192.168.0.10"
+        port: 6443
+        delay: 10
+        timeout: 900
+      become: yes
+      become_user: root
+
+
+    - name: Run 04-helm-controller.sh
+      shell: sh 04-helm-controller.sh
+      become: yes
+      become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
+
+    - name: Run 05-calico-installation.sh
+      shell: sh 05-calico-installation.sh
+      become: yes
+      become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
