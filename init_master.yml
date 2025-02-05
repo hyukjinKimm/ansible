@@ -82,4 +82,4 @@
     - name: Save the file content locally
       copy:
         content: "{{ slurped_file.content | b64decode }}"
-        dest: /root/
+        dest: /root/master_join.sh
