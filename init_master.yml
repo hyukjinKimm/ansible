@@ -50,33 +50,6 @@
         bash -c 'echo "#! /bin/bash" > /kosa-infra-lab/worker_join.sh;
              cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d "\\" | sed "s/^[[:space:]]*//g" | sort | uniq >> /kosa-infra-lab/worker_join.sh;
              cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d "\\" | uniq >> /kosa-infra-lab/worker_join.sh'
-
-    - name: Ensure Master can SSH into SemiMaster nodes without password
-      hosts: Master
-      tasks:
-        - name: Generate SSH key if not exists
-          shell: ssh-keygen -t rsa -b 2048 -f /root/.ssh/id_rsa -q -N ""
-          args:
-            creates: /root/.ssh/id_rsa
-
-        - name: Fetch Master SSH public key
-          command: cat /root/.ssh/id_rsa.pub
-          register: ssh_pub_key
-
-        - name: Add Master’s SSH key to SemiMaster nodes
-          authorized_key:
-            user: root
-            key: "{{ ssh_pub_key.stdout }}"
-            state: present
-          delegate_to: "{{ item }}"
-          with_items: "{{ groups['SemiMaster'] }}"
-          
-    - name: Copy master_join.sh to SemiMaster hosts
-      copy:
-        src: /kosa-infra-lab/master_join.sh
-        dest: /root/
-      delegate_to: "{{ item }}"
-      with_items: "{{ groups['SemiMaster'] }}"
              
     - name: Wait for Kubernetes API server to be ready
       wait_for:
@@ -108,3 +81,31 @@
       become_user: root  # 루트 권한으로 실행
       args:
         chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
+
+
+- name: Ensure Master can SSH into SemiMaster nodes without password
+  hosts: Master
+  tasks:
+    - name: Generate SSH key if not exists
+      shell: ssh-keygen -t rsa -b 2048 -f /root/.ssh/id_rsa -q -N ""
+      args:
+        creates: /root/.ssh/id_rsa
+
+    - name: Fetch Master SSH public key
+      command: cat /root/.ssh/id_rsa.pub
+      register: ssh_pub_key
+
+    - name: Add Master’s SSH key to SemiMaster nodes
+      authorized_key:
+        user: root
+        key: "{{ ssh_pub_key.stdout }}"
+        state: present
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups['SemiMaster'] }}"
+      
+- name: Copy master_join.sh to SemiMaster hosts
+  copy:
+    src: /kosa-infra-lab/master_join.sh
+    dest: /root/
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['SemiMaster'] }}"
