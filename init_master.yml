@@ -40,12 +40,13 @@
 
     - name: Generate join.txt from kubeadm_controller_output.log
       shell: |
-        cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d '\\' | sed 's/^[[:space:]]*//g' | sort | uniq \
+        echo "#! /bin/bash\"
+          && cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d '\\' | sed 's/^[[:space:]]*//g' | sort | uniq \
           && cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d '\\' | uniq \
           && cat /kosa-infra-lab/kubeadm_controller_output.log | grep "control-plane --certificate-key" | tr -d '\\' | uniq \
-          | tr '\n' ' ' > /kosa-infra-lab/master_join.txt
-          
-        cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d '\\' | sed 's/^[[:space:]]*//g' | sort | uniq \
+          | tr '\n' ' ' > /kosa-infra-lab/master_join.sh
+        echo "#! /bin/bash\"
+          && cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d '\\' | sed 's/^[[:space:]]*//g' | sort | uniq \
           && cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d '\\' | uniq \
           | tr '\n' ' ' > /kosa-infra-lab/worker_join.txt
       become: yes
