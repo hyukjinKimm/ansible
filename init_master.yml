@@ -51,7 +51,13 @@
              cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d "\\" | sed "s/^[[:space:]]*//g" | sort | uniq >> /kosa-infra-lab/worker_join.sh;
              cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d "\\" | uniq >> /kosa-infra-lab/worker_join.sh'
              
-
+    - name: Copy master_join.sh to SemiMaster hosts
+      copy:
+        src: /kosa-infra-lab/master_join.sh
+        dest: /root/
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups['SemiMaster'] }}"
+             
     - name: Wait for Kubernetes API server to be ready
       wait_for:
         host: "192.168.0.10"
