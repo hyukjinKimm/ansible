@@ -1,0 +1,32 @@
+- name: Configure Kubernetes Worker Nodes
+  hosts: Workers  # worker 호스트 그룹
+  gather_facts: no
+  serial: 1  # 하나씩 순차적으로 실행
+
+  tasks:
+    - name: Install Git
+      package:
+        name: git
+        state: present
+      become: yes
+
+    - name: Clone kosa-infra-lab repository
+      git:
+        repo: "https://github.com/hyukjinKimm/kosa-infra-lab.git"
+        dest: "/kosa-infra-lab"
+        force: yes
+      become: yes
+      
+    - name: Run 01-node-configure.sh
+      shell: sh 01-node-configure.sh
+      become: yes
+      become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
+
+    - name: Run 03-kubeadm-join.sh
+      shell: sh 03-kubeadm-join.sh
+      become: yes
+      become_user: root  # 루트 권한으로 실행
+      args:
+        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
