@@ -90,3 +90,4 @@
         src: /kosa-infra-lab/master_join.sh  
         dest: /root/
         flat: yes  
+        remote_src: yes  # 원격 서버에서 파일을 찾음
