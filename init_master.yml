@@ -1,5 +1,5 @@
 - name: Configure Kubernetes Controller
-  hosts: Controller  # controller 호스트 그룹
+  hosts: Master  # controller 호스트 그룹
   gather_facts: no
 
   tasks:
@@ -50,7 +50,7 @@
         bash -c 'echo "#! /bin/bash" > /kosa-infra-lab/worker_join.sh;
              cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d "\\" | sed "s/^[[:space:]]*//g" | sort | uniq >> /kosa-infra-lab/worker_join.sh;
              cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d "\\" | uniq >> /kosa-infra-lab/worker_join.sh'
-
+             
 
     - name: Wait for Kubernetes API server to be ready
       wait_for:
@@ -60,6 +60,13 @@
         timeout: 900
       become: yes
       become_user: root
+      
+    - name: Copy master_join.sh to SemiMaster hosts
+      copy:
+        src: /kosa-infra-lab/master_join.sh
+        dest: /root/
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups['SemiMaster'] }}"
 
 
     - name: Run 04-helm-controller.sh
