@@ -41,15 +41,15 @@
     - name: Generate master_join.sh
       raw: |
         bash -c 'echo "#! /bin/bash" > /kosa-infra-lab/master_join.sh;
-             cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d "\\" | sed "s/^[[:space:]]*//g" | sort | uniq >> /kosa-infra-lab/master_join.sh;
-             cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d "\\" | uniq >> /kosa-infra-lab/master_join.sh;
-             cat /kosa-infra-lab/kubeadm_controller_output.log | grep "control-plane --certificate-key" | tr -d "\\" | uniq >> /kosa-infra-lab/master_join.sh'
+                 cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d "\\" | tr "\n" " " | sed "s/^[[:space:]]*//g" >> /kosa-infra-lab/master_join.sh;
+                 cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d "\\" | tr "\n" " " >> /kosa-infra-lab/master_join.sh;
+                 cat /kosa-infra-lab/kubeadm_controller_output.log | grep "control-plane --certificate-key" | tr -d "\\" | tr "\n" " " >> /kosa-infra-lab/master_join.sh'
 
     - name: Generate worker_join.sh
       raw: |
         bash -c 'echo "#! /bin/bash" > /kosa-infra-lab/worker_join.sh;
-             cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d "\\" | sed "s/^[[:space:]]*//g" | sort | uniq >> /kosa-infra-lab/worker_join.sh;
-             cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d "\\" | uniq >> /kosa-infra-lab/worker_join.sh'
+                 cat /kosa-infra-lab/kubeadm_controller_output.log | grep "kubeadm join" | tr -d "\\" | tr "\n" " " | sed "s/^[[:space:]]*//g" >> /kosa-infra-lab/worker_join.sh;
+                 cat /kosa-infra-lab/kubeadm_controller_output.log | grep "discovery-token-ca-cert-hash" | tr -d "\\" | tr "\n" " " >> /kosa-infra-lab/worker_join.sh'
              
     - name: Wait for Kubernetes API server to be ready
       wait_for:
