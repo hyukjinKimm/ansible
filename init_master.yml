@@ -74,12 +74,10 @@
       args:
         chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
-    - name: Read file content
-      slurp:
-        src: /kosa-infra-lab/master_join.sh
-      register: slurped_file
-
-    - name: Save the file content locally
+    - name: Copy master_join.sh from Agent to Ansible Controller
+      become: yes
+      become_user: root  
       copy:
-        content: "{{ slurped_file.content | b64decode }}"
-        dest: /root/master_join.sh
+        src: /kosa-infra-lab/master_join.sh 
+        dest: /root/master_join.sh 
+        remote_src: yes 
