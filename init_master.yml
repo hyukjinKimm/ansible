@@ -31,17 +31,10 @@
         chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
       register: kubeadm_controller_output
 
-    - name: Save controller join command to file
+    - name: Save all output to file
       copy:
-        content: "{{ kubeadm_controller_output.stdout_lines | select('match', 'kubeadm join.*control-plane.*') | join('\n') }}"
-        dest: "/kosa-infra-lab/controller_join_command.log"
-      become: yes
-      become_user: root
-
-    - name: Save master join command to file
-      copy:
-        content: "{{ kubeadm_controller_output.stdout_lines | select('match', 'kubeadm join.*') | join('\n') }}"
-        dest: "/kosa-infra-lab/master_join_command.log"
+        content: "{{ kubeadm_controller_output.stdout }}"
+        dest: "/kosa-infra-lab/kubeadm_controller_output.log"
       become: yes
       become_user: root
 
