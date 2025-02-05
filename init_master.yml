@@ -103,9 +103,9 @@
       delegate_to: "{{ item }}"
       with_items: "{{ groups['SemiMaster'] }}"
       
-- name: Copy master_join.sh to SemiMaster hosts
-  copy:
-    src: /kosa-infra-lab/master_join.sh
-    dest: /root/
-  delegate_to: "{{ item }}"
-  with_items: "{{ groups['SemiMaster'] }}"
+    - name: Copy master_join.sh to SemiMaster hosts
+      copy:
+        src: /kosa-infra-lab/master_join.sh
+        dest: /root/
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups['SemiMaster'] }}"
