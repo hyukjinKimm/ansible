@@ -80,4 +80,3 @@
       copy:
         src: /kosa-infra-lab/master_join.sh 
         dest: /root/master_join.sh 
-        remote_src: yes 
