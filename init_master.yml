@@ -83,9 +83,6 @@
         chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
 
-- name: Ensure Master can SSH into SemiMaster nodes without password
-  hosts: Master
-  tasks:
     - name: Fetch master_join.sh from Master to Ansible Controller
       fetch:
         src: /kosa-infra-lab/master_join.sh
@@ -98,6 +95,4 @@
         dest: /root/master_join.sh
       delegate_to: "{{ item }}"
       with_items: "{{ groups['SemiMaster'] }}"
-
-      
 
