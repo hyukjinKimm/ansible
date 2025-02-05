@@ -33,14 +33,14 @@
 
     - name: Save controller join command to file
       copy:
-        content: "{{ kubeadm_controller_output.stdout | regex_search('.*kubeadm join.*control-plane.*', multiline=True) }}"
+        content: "{{ kubeadm_controller_output.stdout_lines | select('match', 'kubeadm join.*control-plane.*') | join('\n') }}"
         dest: "/kosa-infra-lab/controller_join_command.log"
       become: yes
       become_user: root
 
     - name: Save master join command to file
       copy:
-        content: "{{ kubeadm_controller_output.stdout | regex_search('.*kubeadm join.*', multiline=True) }}"
+        content: "{{ kubeadm_controller_output.stdout_lines | select('match', 'kubeadm join.*') | join('\n') }}"
         dest: "/kosa-infra-lab/master_join_command.log"
       become: yes
       become_user: root
