@@ -59,14 +59,6 @@
         timeout: 900
       become: yes
       become_user: root
-      
-    - name: Copy master_join.sh to SemiMaster hosts
-      copy:
-        src: /kosa-infra-lab/master_join.sh
-        dest: /root/
-      delegate_to: "{{ item }}"
-      with_items: "{{ groups['SemiMaster'] }}"
-
 
     - name: Run 04-helm-controller.sh
       shell: sh 04-helm-controller.sh
