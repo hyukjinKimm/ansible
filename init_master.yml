@@ -74,9 +74,9 @@
       args:
         chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
-    - name: Copy master_join.sh from Agent to Ansible Controller
-      become: yes
-      become_user: root  
-      copy:
-        src: /kosa-infra-lab/master_join.sh 
-        dest: /root/master_join.sh 
+    - name: file move to control node
+      fetch:
+        src: /kosa-infra-lab/master_join.sh
+        dest: ./master_join.sh
+        flat: yes
+
