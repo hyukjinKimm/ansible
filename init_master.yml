@@ -83,20 +83,10 @@
         chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
 
-    - name: Copy master_join.sh to Ansible Controller
+    - name: Copy master_join.sh from Agent to Ansible Controller
       become: yes
       become_user: root  # 루트 권한으로 실행
-      copy:
-        src: /kosa-infra-lab/master_join.sh
-        dest: /root/master_join.sh
-      delegate_to: localhost
-    
-    - name: Copy master_join.sh to SemiMaster nodes
-      become: yes
-      become_user: root  # 루트 권한으로 실행
-      copy:
-        src: /root/master_join.sh
-        dest: /root/master_join.sh
-      delegate_to: "{{ item }}"
-      with_items: "{{ groups['SemiMaster'] }}"
-
+      fetch:
+        src: /kosa-infra-lab/master_join.sh  
+        dest: /root/
+        flat: yes  
