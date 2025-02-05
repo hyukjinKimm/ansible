@@ -4,6 +4,19 @@
   gather_facts: no
 
   tasks:
+      - name: Install Git
+      package:
+        name: git
+        state: present
+      become: yes
+
+    - name: Clone kosa-infra-lab repository
+      git:
+        repo: "https://github.com/hyukjinKimm/kosa-infra-lab.git"
+        dest: "/kosa-infra-lab"
+        force: yes  # 기존 디렉토리 삭제 후 다시 클론
+      become: yes
+      
     - name: Run 01-node-configure.sh
       shell: sh 01-node-configure.sh
       become: yes
@@ -48,6 +61,19 @@
   serial: 1  # 하나씩 순차적으로 실행
 
   tasks:
+      - name: Install Git
+      package:
+        name: git
+        state: present
+      become: yes
+
+    - name: Clone kosa-infra-lab repository
+      git:
+        repo: "https://github.com/hyukjinKimm/kosa-infra-lab.git"
+        dest: "/kosa-infra-lab"
+        force: yes
+      become: yes
+      
     - name: Run 01-node-configure.sh
       shell: sh 01-node-configure.sh
       become: yes
