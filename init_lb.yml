@@ -1,0 +1,79 @@
+---
+- name: Disable firewalld and change SELinux settings on LB hosts
+  hosts: LBs 
+  become: yes  # root 권한으로 실행
+  tasks:
+    - name: Disable firewalld service
+      systemd:
+        name: firewalld
+        state: stopped
+        enabled: no
+
+    - name: Set SELinux to permissive in the configuration file
+      lineinfile:
+        path: /etc/selinux/config
+        regexp: '^SELINUX='
+        line: 'SELINUX=permissive'
+
+    - name: Set SELinux to permissive mode immediately
+      command: setenforce 0
+      when: ansible_facts['selinux']['status'] == 'Enforcing'
+
+    - name: Get current SELinux mode
+      command: getenforce
+      register: selinux_status
+
+    - name: Display current SELinux mode
+      debug:
+        msg: "Current SELinux status is {{ selinux_status.stdout }}"
+
+    - name: Install HAProxy
+      dnf:
+        name: haproxy
+        state: present
+
+    - name: Configure HAProxy settings
+      copy:
+        dest: /etc/haproxy/haproxy.cfg
+        content: |
+          #---------------------------------------------------------------------
+          # Global defaults (모든 'frontend' 및 'backend' 섹션에 공통적으로 적용)
+          #---------------------------------------------------------------------
+          defaults
+              log     global
+              option  httplog
+              timeout connect 10s
+              timeout client  1m
+              timeout server  1m
+              timeout check   10s
+              retries 3
+              maxconn 3000
+
+          #---------------------------------------------------------------------
+          # API 서버를 위한 frontend 설정 (TCP 모드)
+          #---------------------------------------------------------------------
+          frontend apiserver
+              bind *:6443  # API 서버 포트 (Kubernetes API 서버가 6443 포트에서 실행)
+              mode tcp
+              option tcplog
+              default_backend apiserver_backend  # 기본적으로 연결할 backend 설정
+
+          #---------------------------------------------------------------------
+          # backend 설정: 다중 마스터 노드를 위한 로드 밸런싱
+          #---------------------------------------------------------------------
+          backend apiserver_backend
+              mode tcp
+              balance roundrobin
+              {% for node in groups['Masters'] %}
+              server {{ node }} {{ hostvars[node]['ansible_host'] }}:6443 check  # {{ node }} 서버
+              {% endfor %}
+
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Restart HAProxy to apply configuration
+      systemd:
+        name: haproxy
+        state: restarted
+        enabled: yes
