@@ -23,8 +23,22 @@ lb.example.com 192.168.0.200  # haproxy를 위한 vip
 
 ### 사용 방법
 ```bash
+# LB + 클러스터 구축
 sudo dnf install ansible -y
 sudo dnf install sshpass -y
 sudo dnf install git -y
 sudo git clone https://github.com/hyukjinKimm/ansible.git
 sudo sh ansible/setup.sh
+
+```bash
+# LB + 클러스터 삭제
+sudo sh ansible/clean_all.sh
+
+```bash
+# LB 삭제 
+sudo sh ansible/clean_lb.yml
+
+```bash
+# 클러스터 삭제 
+sudo sh ansible/clean_cluster.yml
+
