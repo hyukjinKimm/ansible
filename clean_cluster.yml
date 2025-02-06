@@ -28,6 +28,11 @@
       shell: rm -rf /kosa-infra-lab/
       become: yes
       become_user: root  # 루트 권한으로 실행
+
+    - name: Delete CNI
+      shell: rm -rf /etc/cni/net.d/*
+      become: yes
+      become_user: root  # 루트 권한으로 실행
       
       
     - name: Reboot the system
