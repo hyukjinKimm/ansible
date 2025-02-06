@@ -1,7 +1,8 @@
 - name: Configure Kubernetes Controller
   hosts: SemiMaster
   gather_facts: no
-
+  serial: 1  # 한 번에 하나의 노드만 실행
+  
   tasks:
     - name: Copy master_join.sh to SemiMaster
       copy:
