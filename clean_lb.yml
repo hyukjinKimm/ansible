@@ -2,7 +2,7 @@
 - name: Undo changes on LBs (Load Balancers)
   hosts: LBs
   become: yes
-
+  gather_facts: no
   tasks:
 
     - name: Disable HAProxy service
@@ -26,6 +26,7 @@
 - name: Undo changes on PrimaryLB
   hosts: PrimaryLB
   become: yes
+  gather_facts: no
   tasks:
     - name: Uninstall Keepalived
       dnf:
@@ -49,6 +50,7 @@
 - name: Undo changes on SecondaryLB
   hosts: SecondaryLB
   become: yes
+  gather_facts: no
   tasks:
     - name: Uninstall Keepalived
       dnf:
