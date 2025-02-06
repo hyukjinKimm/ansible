@@ -84,6 +84,7 @@
 - name: Configure PrimaryLB
   hosts: PrimaryLB
   become: yes
+  gather_facts: no
   tasks:
     - name: Install Keepalived
       dnf:
@@ -125,6 +126,7 @@
 - name: Configure SecondaryLB
   hosts: SecondaryLB
   become: yes
+  gather_facts: no
   tasks:
     - name: Install Keepalived
       dnf:
@@ -167,6 +169,7 @@
 - name: Reboot the servers
   hosts: LBs  # 모든 호스트에 대해 재부팅 수행
   become: yes  # root 권한으로 실행
+  gather_facts: no
   tasks:
     - name: Reboot the system
       reboot:
