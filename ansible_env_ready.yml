@@ -8,17 +8,35 @@
       blockinfile: 
         path: /etc/ansible/hosts
         block: |
-          [Master]
+          [PrimaryMaster]
           192.168.0.10
-          [SemiMaster]
+          [SecondaryMaster]
           192.168.0.11
           192.168.0.12
+          [Masters]
+          master1 ansible_agent=192.168.0.10
+          master2 ansible_agent=192.168.0.11
+          master3 ansible_agent=192.168.0.13
           [Workers]
           192.168.0.20
           192.168.0.30
           [Storage]
           192.168.0.40
-          [LB]
+          [PrimaryLB]
+          192.168.0.122
+          [SecondaryLB]
+          192.168.0.123
+          [LBs]
+          192.168.0.122
+          192.168.0.123 
+          [VIP]
+          192.168.0.200
+          [All]
+          192.168.0.10
+          192.168.0.11
+          192.168.0.12
+          192.168.0.20
+          192.168.0.30
+          192.168.0.40
           192.168.0.122
           192.168.0.123
-          
