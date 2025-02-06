@@ -81,7 +81,6 @@
 
 
 
----
 - name: Configure PrimaryLB
   hosts: PrimaryLB
   become: yes
@@ -122,7 +121,7 @@
         name: keepalived
         state: restarted
         enabled: yes
----
+
 - name: Configure SecondaryLB
   hosts: SecondaryLB
   become: yes
@@ -164,7 +163,7 @@
         state: restarted
         enabled: yes
 
----
+
 - name: Reboot the servers
   hosts: LBs  # 모든 호스트에 대해 재부팅 수행
   become: yes  # root 권한으로 실행
