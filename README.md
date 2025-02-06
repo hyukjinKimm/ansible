@@ -1,9 +1,12 @@
 # haproxy + 멀티마스터 k8s 자동화
 ### SPEC & SETTINGS
-(NAT) 10.10.10.0/24
-(internal) 192.168.0.0/16   
+(ens160 NAT) 10.10.10.0/24
+(ens192 internal) 192.168.0.0/16   
 
 Rocky Linux9  
+ID: root
+PASSWORD: 1234
+
 bootstrap 192.168.0.100/16 2cpu 2G  
 controller1.example.com 192.168.0.10/16  2cpu 4G  
 controller2.example.com 192.168.0.11/16  2cpu 4G  
