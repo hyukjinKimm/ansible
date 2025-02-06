@@ -2,6 +2,7 @@
 - name: Undo changes on LBs (Load Balancers)
   hosts: LBs
   become: yes
+  gather_facts: no
   tasks:
     - name: Uninstall HAProxy
       dnf:
