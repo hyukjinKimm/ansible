@@ -4,13 +4,6 @@
   become: yes
   gather_facts: yes  # 시스템 정보 수집
   tasks:
-    - name: Disable HAProxy service
-      systemd:
-        name: haproxy
-        state: stopped
-        enabled: no  # HAProxy 서비스를 비활성화
-      when: "'haproxy' in ansible_facts.services"  # 서비스가 존재하는 경우에만 실행
-      
     - name: Uninstall HAProxy
       dnf:
         name: haproxy
@@ -20,7 +13,6 @@
       file:
         path: /etc/haproxy/haproxy.cfg
         state: absent  # HAProxy 설정 파일 삭제
-
 
 - name: Undo changes on PrimaryLB
   hosts: PrimaryLB
