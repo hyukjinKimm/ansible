@@ -92,7 +92,7 @@
           }
           vrrp_instance VI_1 {
               state MASTER
-              interface ens190
+              interface ens192
               virtual_router_id 51
               priority 200
               advert_int 1
@@ -134,7 +134,7 @@
           }
           vrrp_instance VI_2 {
               state BACKUP
-              interface ens190
+              interface ens192
               virtual_router_id 51
               priority 200
               advert_int 1
