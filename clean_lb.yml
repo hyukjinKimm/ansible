@@ -19,7 +19,6 @@
         state: stopped
         enabled: no  # HAProxy 서비스를 비활성화
 
----
 - name: Undo changes on PrimaryLB
   hosts: PrimaryLB
   become: yes
@@ -40,7 +39,6 @@
         state: stopped
         enabled: no  # Keepalived 서비스를 비활성화
 
----
 - name: Undo changes on SecondaryLB
   hosts: SecondaryLB
   become: yes
@@ -61,7 +59,6 @@
         state: stopped
         enabled: no  # Keepalived 서비스를 비활성화
 
----
 - name: Revert the servers
   hosts: LBs  # 모든 호스트에 대해 작업 수행
   become: yes  # root 권한으로 실행
