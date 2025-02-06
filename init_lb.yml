@@ -65,7 +65,7 @@
               mode tcp
               balance roundrobin
               {% for node in groups['Masters'] %}
-              server {{ node }} {{ hostvars[node]['ansible_host'] }}:6443 check  # {{ node }} 서버
+              server {{ node }} {{ hostvars[node]['ansible_agent'] }}:6443 check 
               {% endfor %}
 
         owner: root
@@ -77,3 +77,98 @@
         name: haproxy
         state: restarted
         enabled: yes
+
+
+
+---
+- name: Configure PrimaryLB
+  hosts: PrimaryLB
+  become: yes
+  tasks:
+    - name: Install Keepalived
+      dnf:
+        name: keepalived
+        state: present
+
+    - name: Configure Keepalived settings
+      copy:
+        dest: /etc/keepalived/keepalived.conf
+        content: |
+          ! Configuration File for keepalived
+          global_defs {
+              router_id VR_1
+          }
+          vrrp_instance VI_1 {
+              state MASTER
+              interface ens190
+              virtual_router_id 51
+              priority 200
+              advert_int 1
+              authentication {
+                  auth_type PASS
+                  auth_pass 1111
+              }
+              virtual_ipaddress {
+                  {{ groups['VIP'][0] }}
+              }
+          }
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Restart and enable Keepalived service
+      systemd:
+        name: keepalived
+        state: restarted
+        enabled: yes
+---
+- name: Configure SecondaryLB
+  hosts: SecondaryLB
+  become: yes
+  tasks:
+    - name: Install Keepalived
+      dnf:
+        name: keepalived
+        state: present
+
+    - name: Configure Keepalived settings
+      copy:
+        dest: /etc/keepalived/keepalived.conf
+        content: |
+          ! Configuration File for keepalived
+          global_defs {
+              router_id VR_2
+          }
+          vrrp_instance VI_2 {
+              state BACKUP
+              interface ens190
+              virtual_router_id 51
+              priority 200
+              advert_int 1
+              authentication {
+                  auth_type PASS
+                  auth_pass 1111
+              }
+              virtual_ipaddress {
+                  {{ groups['VIP'][0] }}
+              }
+          }
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Restart and enable Keepalived service
+      systemd:
+        name: keepalived
+        state: restarted
+        enabled: yes
+
+---
+- name: Reboot the servers
+  hosts: LBs  # 모든 호스트에 대해 재부팅 수행
+  become: yes  # root 권한으로 실행
+  tasks:
+    - name: Reboot the system
+      reboot:
+        reboot_timeout: 600  # 재부팅 최대 대기 시간 (초)
+        test_command: uptime  # 재부팅 후 실행할 명령어 (시스템이 응답하면 종료)
