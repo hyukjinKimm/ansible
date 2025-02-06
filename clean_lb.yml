@@ -2,18 +2,27 @@
 - name: Undo changes on LBs (Load Balancers)
   hosts: LBs
   become: yes
-  gather_facts: yes  # 시스템 정보 수집
+
   tasks:
+
+    - name: Disable HAProxy service
+      systemd:
+        name: haproxy
+        state: stopped
+        enabled: no  # HAProxy 서비스를 비활성화
+      ignore_errors: yes  # 실패해도 다음 태스크로 넘어감
+      
     - name: Uninstall HAProxy
       dnf:
         name: haproxy
         state: absent  # HAProxy 패키지를 제거
-
+      ignore_errors: yes 
     - name: Remove HAProxy configuration
       file:
         path: /etc/haproxy/haproxy.cfg
         state: absent  # HAProxy 설정 파일 삭제
-
+      ignore_errors: yes 
+      
 - name: Undo changes on PrimaryLB
   hosts: PrimaryLB
   become: yes
@@ -22,17 +31,20 @@
       dnf:
         name: keepalived
         state: absent  # Keepalived 패키지를 제거
+      ignore_errors: yes 
 
     - name: Remove Keepalived configuration
       file:
         path: /etc/keepalived/keepalived.conf
         state: absent  # Keepalived 설정 파일 삭제
+      ignore_errors: yes 
 
     - name: Disable Keepalived service
       systemd:
         name: keepalived
         state: stopped
         enabled: no  # Keepalived 서비스를 비활성화
+      ignore_errors: yes 
 
 - name: Undo changes on SecondaryLB
   hosts: SecondaryLB
@@ -42,17 +54,20 @@
       dnf:
         name: keepalived
         state: absent  # Keepalived 패키지를 제거
+      ignore_errors: yes 
 
     - name: Remove Keepalived configuration
       file:
         path: /etc/keepalived/keepalived.conf
         state: absent  # Keepalived 설정 파일 삭제
+      ignore_errors: yes 
 
     - name: Disable Keepalived service
       systemd:
         name: keepalived
         state: stopped
         enabled: no  # Keepalived 서비스를 비활성화
+      ignore_errors: yes 
 
 - name: Revert the servers
   hosts: LBs  # 모든 호스트에 대해 작업 수행
