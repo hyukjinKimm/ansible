@@ -18,7 +18,6 @@
 
     - name: Set SELinux to permissive mode immediately
       command: setenforce 0
-      when: selinux_status.stdout == 'Enforcing'
 
     - name: Install HAProxy
       dnf:
