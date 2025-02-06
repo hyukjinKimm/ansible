@@ -1,9 +1,14 @@
-- name: Configure Kubernetes Worker Nodes
-  hosts: Workers  # worker 호스트 그룹
+- name: Configure Kubernetes Controller
+  hosts: Workers
   gather_facts: no
-  serial: 1  # 하나씩 순차적으로 실행
-
+  serial: 1  # 한 번에 하나의 노드만 실행
+  
   tasks:
+    - name: Copy worker_join.sh to Workers
+      copy:
+        src: /root/worker_join.sh  
+        dest: /root/worker_join.sh           
+
     - name: Install Git
       package:
         name: git
@@ -14,9 +19,9 @@
       git:
         repo: "https://github.com/hyukjinKimm/kosa-infra-lab.git"
         dest: "/kosa-infra-lab"
-        force: yes
+        force: yes  # 기존 디렉토리 삭제 후 다시 클론
       become: yes
-      
+
     - name: Run 01-node-configure.sh
       shell: sh 01-node-configure.sh
       become: yes
@@ -24,9 +29,7 @@
       args:
         chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
 
-    - name: Run 03-kubeadm-join.sh
-      shell: sh 03-kubeadm-join.sh
+    - name: Join Workers
+      shell: sh /root/worker_join.sh 
       become: yes
       become_user: root  # 루트 권한으로 실행
-      args:
-        chdir: /kosa-infra-lab  # 해당 디렉토리에서 실행
