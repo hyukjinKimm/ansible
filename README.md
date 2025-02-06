@@ -1,4 +1,5 @@
-# SPEC & SETTINGS
+# haproxy + 멀티마스터 k8s 자동화
+### SPEC & SETTINGS
 (NAT) 10.10.10.0/24
 (internal) 192.168.0.0/16   
 
@@ -17,8 +18,8 @@ lb2 192.168.0.123/16 1cpu 1G
 lb.example.com 192.168.0.200  # haproxy를 위한 vip
 
 
+### 사용 방법
 ```bash
-# 초기화 방법
 sudo dnf install ansible -y
 sudo dnf install sshpass -y
 sudo dnf install git -y
