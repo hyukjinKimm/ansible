@@ -1,5 +1,5 @@
-- name: Configure Kubernetes Controller
-  hosts: Master  # Master 호스트 그룹
+- name: Configure Kubernetes PrimaryMaster
+  hosts: PrimaryMaster  # PrimaryMaster 호스트 그룹
   gather_facts: no
 
   tasks:
