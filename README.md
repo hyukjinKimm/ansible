@@ -1,3 +1,4 @@
+#SPEC & SETTINGS
 (NAT) 10.10.10.0/24
 (internal) 192.168.0.0/16 
 
