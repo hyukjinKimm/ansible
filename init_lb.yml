@@ -2,6 +2,7 @@
 - name: Disable firewalld and change SELinux settings on LB hosts
   hosts: LBs 
   become: yes  # root 권한으로 실행
+  gather_facts: no
   tasks:
     - name: Disable firewalld service
       systemd:
