@@ -14,9 +14,9 @@
           192.168.0.11
           192.168.0.12
           [Masters]
-          master1 ansible_agent=192.168.0.10
-          master2 ansible_agent=192.168.0.11
-          master3 ansible_agent=192.168.0.13
+          controller1.example.com ansible_agent=192.168.0.10
+          controller2.example.com ansible_agent=192.168.0.11
+          controller3.example.com ansible_agent=192.168.0.13
           [Workers]
           192.168.0.20
           192.168.0.30
