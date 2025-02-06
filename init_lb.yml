@@ -18,15 +18,7 @@
 
     - name: Set SELinux to permissive mode immediately
       command: setenforce 0
-      when: ansible_facts['selinux']['status'] == 'Enforcing'
-
-    - name: Get current SELinux mode
-      command: getenforce
-      register: selinux_status
-
-    - name: Display current SELinux mode
-      debug:
-        msg: "Current SELinux status is {{ selinux_status.stdout }}"
+      when: selinux_status.stdout == 'Enforcing'
 
     - name: Install HAProxy
       dnf:
