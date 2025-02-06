@@ -1,8 +1,7 @@
 ---
 - name: Reset Kubernetes and remove related packages
   hosts: 
-    - Master  # Master 호스트 그룹
-    - SemiMaster  # SemiMaster 호스트 그룹
+    - Masters  # Master 호스트 그룹
     - Workers     # worker 호스트 그룹
   gather_facts: no
 
