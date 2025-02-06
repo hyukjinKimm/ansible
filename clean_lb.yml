@@ -2,14 +2,15 @@
 - name: Undo changes on LBs (Load Balancers)
   hosts: LBs
   become: yes
-  gather_facts: no
+
   tasks:
     - name: Disable HAProxy service
       systemd:
         name: haproxy
         state: stopped
         enabled: no  # HAProxy 서비스를 비활성화
-        
+      when: "'haproxy' in ansible_facts.services"  # 서비스가 존재하는 경우에만 실행
+      
     - name: Uninstall HAProxy
       dnf:
         name: haproxy
