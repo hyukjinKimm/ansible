@@ -8,7 +8,8 @@
       copy:
         src: /root/worker_join.sh  
         dest: /root/worker_join.sh           
-
+      become: yes
+      
     - name: Install Git
       package:
         name: git
