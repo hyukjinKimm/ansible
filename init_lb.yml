@@ -9,16 +9,19 @@
         name: firewalld
         state: stopped
         enabled: no
+      ignore_errors: yes
 
     - name: Set SELinux to permissive in the configuration file
       lineinfile:
         path: /etc/selinux/config
         regexp: '^SELINUX='
         line: 'SELINUX=permissive'
+      ignore_errors: yes
 
     - name: Set SELinux to permissive mode immediately
       command: setenforce 0
-
+      ignore_errors: yes
+      
     - name: Install HAProxy
       dnf:
         name: haproxy
