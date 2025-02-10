@@ -1,5 +1,7 @@
-#! /bin/bash 
 
+sudo -i
+# ansible 폴더로 이동 
+  
 ansible-playbook ansible_env_ready.yml
 sh add_ssh_auth.sh
 ansible-playbook init_lb.yml -vvv -k -u myuser  --ask-become-pass  >  init_lb.log
