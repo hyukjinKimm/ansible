@@ -50,7 +50,7 @@
 
     - name: Wait for Kubernetes API server to be ready
       wait_for:
-        host: "192.168.0.10"
+        host: "192.168.100.101"
         port: 6443
         delay: 10
         timeout: 900
