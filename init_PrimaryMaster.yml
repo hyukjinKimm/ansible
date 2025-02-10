@@ -42,11 +42,13 @@
       raw: |
         bash -c 'echo "#! /bin/bash" > /kosa-infra-lab/master_join.sh;
              sed -n '72,74p' /kosa-infra-lab/kubeadm_controller_output.log >> /kosa-infra-lab/master_join.sh'
+      become: yes
 
     - name: Generate worker_join.sh
       raw: |
         bash -c 'echo "#! /bin/bash" > /kosa-infra-lab/worker_join.sh;
              sed -n '82,83p' /kosa-infra-lab/kubeadm_controller_output.log >> /kosa-infra-lab/worker_join.sh'
+      become: yes
 
     - name: Wait for Kubernetes API server to be ready
       wait_for:
