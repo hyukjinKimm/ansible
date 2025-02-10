@@ -8,46 +8,43 @@
       blockinfile: 
         path: /etc/hosts
         block: |
-          192.168.0.10 controller1.example.com controller1
-          192.168.0.11 controller2.example.com controller2
-          192.168.0.12 controller3.example.com controller3
-          192.168.0.20 worker1.example.com worker1
-          192.168.0.30 worker2.example.com worker2
-          192.168.0.40 storage.example.com storage
-          192.168.0.200 lb.example.com
+          192.168.100.101 controller1.example.com controller1
+          192.168.100.102 controller2.example.com controller2
+          192.168.100.103 controller3.example.com controller3
+          192.168.100.104 worker1.example.com worker1
+          192.168.100.105 worker2.example.com worker2
+          192.168.100.150 lb.example.com
     - name: Add "/etc/ansible/hosts"
       blockinfile: 
         path: /etc/ansible/hosts
         block: |
           [PrimaryMaster]
-          192.168.0.10
+          192.168.100.101
           [SecondaryMaster]
-          192.168.0.11
-          192.168.0.12
+          192.168.100.102
+          192.168.100.103
           [Masters]
-          controller1.example.com ansible_agent=192.168.0.10
-          controller2.example.com ansible_agent=192.168.0.11
-          controller3.example.com ansible_agent=192.168.0.13
+          controller1.example.com ansible_agent=192.168.100.101
+          controller2.example.com ansible_agent=192.168.100.102
+          controller3.example.com ansible_agent=1192.168.100.103
           [Workers]
-          192.168.0.20
-          192.168.0.30
-          [Storage]
-          192.168.0.40
+          192.168.100.104
+          192.168.100.105
           [PrimaryLB]
-          192.168.0.122
+          192.168.100.106
           [SecondaryLB]
-          192.168.0.123
+          192.168.100.107
           [LBs]
-          192.168.0.122
-          192.168.0.123 
+          192.168.100.106
+          192.168.100.107 
           [VIP]
-          192.168.0.200
+          192.168.100.150
           [All]
-          192.168.0.10
-          192.168.0.11
-          192.168.0.12
-          192.168.0.20
-          192.168.0.30
-          192.168.0.40
-          192.168.0.122
-          192.168.0.123
+          192.168.100.101
+          192.168.100.102
+          192.168.100.103
+          192.168.100.104
+          192.168.100.105
+          192.168.100.106
+          192.168.100.107
+  
