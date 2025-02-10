@@ -8,7 +8,7 @@
       copy:
         src: /root/master_join.sh  
         dest: /root/master_join.sh           
-
+      become: yes
     - name: Install Git
       package:
         name: git
