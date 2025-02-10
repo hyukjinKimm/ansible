@@ -26,7 +26,7 @@
           [Masters]
           controller1.example.com ansible_agent=192.168.100.101
           controller2.example.com ansible_agent=192.168.100.102
-          controller3.example.com ansible_agent=1192.168.100.103
+          controller3.example.com ansible_agent=192.168.100.103
           [Workers]
           192.168.100.104
           192.168.100.105
