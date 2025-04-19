@@ -27,8 +27,6 @@ sudo -i
 
 # 호스트그룹 초기화
 ansible-playbook ansible_env_ready.yml
-# SSH 키 교환
-sh add_ssh_auth.sh
 # LB 초기화
 ansible-playbook init_lb.yml -vvv -k -u myuser  --ask-become-pass  >  init_lb.log
 # 메인 마스터 노드 초기화
